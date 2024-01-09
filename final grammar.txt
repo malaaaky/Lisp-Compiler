@@ -1,0 +1,65 @@
+Program → Header DeclSec statements End
+Header → Program Identifier 
+EndProgram → End Program Identifier
+DeclSec → Implicit none Dsec
+DSec →ConstDecls | VarDecls | ε
+
+ConstDecls → ConstDecl CDecls 
+CDels → ConstDecl |  ε
+ConstDecl  → Datatype , Parameter :: Identifier = Constant
+
+#varDecl → Datatype :: IdList
+#Datatype → integer|real|complex|logical|character
+#IdList  → Identifier IdenList
+#idenList  → ,Identifier  |  ε
+#VarDecls → VarDecl VDecls
+#VDecls →  VarDecl  | ε
+
+#Statements → Statement State 
+#State → ,Statement  |  ε
+#Statement  → AssignmentStatement| Readstar statement | prinstar statement | IfElseStatement| doloop statement | call identifier | nested do loops statement
+IfElseStatement → IF ( LogicalExpr ) THEN Statements [ ELSE Statements ] END IF
+
+#AssignmentStatement → Variable = Expression
+#Variable → Identifier
+#Expression → Term Exp 
+#Term → Factor Ter
+#Exp → AddOp Term  | ε
+#Ter → MultOp Factor  | ε
+#Factor → identifier | constant
+#AddOp  → + | -
+#MultOp → * | /
+
+
+#LogicalExpr  → >,<,<=,.+,==,/=
+
+ReadstarStatement → READ(*,*) VariableList
+VariableList → Variable VariableListTail
+VariableListTail → , Variable VariableListTail | ε
+
+PrinstarStatement → PRINT(*,*) PrintableList
+PrintableList → Printable PrintableListTail
+PrintableListTail → , Printable PrintableListTail | ε
+Printable → Expression | String
+String → ' CharList '
+CharList → Char CharListTail
+CharListTail → Char CharListTail | ε
+Char → any printable ASCII character except ' or \
+
+
+DoloopStatement → DO LoopVariable = StartExpr, EndExpr [, StepExpr] Statements END DO
+LoopVariable → Identifier
+StartExpr → Expression
+EndExpr → Expression
+StepExpr → Expression
+
+NestedDoloopStatement → DO LoopVariable = StartExpr, EndExpr [, StepExpr] NestedDoloopTail
+NestedDoloopTail → , LoopVariable = StartExpr, EndExpr [, StepExpr] NestedDoloopTail | Statements END DO
+CallStatement → CALL Identifier [ ( ArgList ) ]
+ArgList → Expression ArgListTail
+ArgListTail → , Expression ArgListTail | ε
+ 
+
+
+
+
